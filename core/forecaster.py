@@ -18,17 +18,15 @@ class Forecaster:
         with open(path, "r", encoding="utf-8") as f:
             config = json.load(f)
             cfg    = config.get("forecast", {})
-            
-        #self.method = cfg.get("method", "RF")
-        self.n_lags = cfg.get("lags", 5)
-        self.n_estimators = cfg.get("n_estimators", 10)
-        self.max_depth = cfg.get("max_depth", 5)
-        
+                    
     def predictions(self):
         df = self.df
-        self.method  = self.indicator.get("ind_t", "RF")
-        #self.n_estimators = self.n_estimators("ind_p", [])[0]
-        #self.max_depth = self.indicator.get("ind_p", [])[1]
+        method = self.indicator.get("ind_t", "RF")
+        params = self.indicator.get("ind_p", [])        
+        self.n_estimators = params[0]
+        self.max_depth    = params[1]
+        self.n_lags       = params[2]
+        
         y  = df["Close"]
 
         # build features for ML model
@@ -40,9 +38,9 @@ class Forecaster:
         Y = np.array(Y)
 
         # train decision trees
-        if self.method == "RF":
+        if method == "RF":
             model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)
-        elif self.method == "DT":
+        elif method == "DT":
             model = DecisionTreeRegressor(max_depth=self.max_depth)
         model.fit(X, Y)
         self.model = model

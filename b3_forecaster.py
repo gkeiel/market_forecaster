@@ -65,9 +65,6 @@ def main():
         exporter = Exporter()
         exporter.export_dataframe(pro_data)
 
-        # exports backtesting results
-        exporter.export_results(res_data)
-
         # exports backtesting results sorted by best
         exporter.export_best_results(bst_data)
 
