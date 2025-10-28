@@ -16,24 +16,18 @@ class Backtester:
             config = json.load(f)
             cfg    = config.get("backtest", {})
             
-        self.ma_v = cfg.get("ma_volume", 10)
-
     def run_strategy(self, indicator):
         try:
             df     = self.df
             params = indicator["ind_p"]   
     
-            # calculate volume MA
-            df["VMA"] = df["Volume"].rolling(window=self.ma_v).mean()        # volume MA
-
             # generate buy/sell signals
             df["Signal"] = 0
             df.loc[df["Predicted_Close"] > (1+0.005)*df["Close"], "Signal"] = 1
             df.loc[df["Predicted_Close"] < (1-0.005)*df["Close"], "Signal"] = -1
             df["Signal_Length"] = df["Signal"].groupby((df["Signal"] != df["Signal"].shift()).cumsum()).cumcount() +1   # consecutive samples of same signal (signal length)
             df.loc[df["Signal"] == 0, "Signal_Length"] = 0                                                              # length is zero while there is no signal
-            df.loc[df["Signal_Length"] < 4, "Signal"] = 0
-            df["Volume_Strength"] = (df["Volume"] -df["VMA"])/df["VMA"]                                                 # volume strenght
+            df.loc[df["Signal_Length"] < 3, "Signal"] = 0
 
             # simulate execution (backtest)
             df["Position"] = df["Signal"].shift(1)                      # simulate position (using previous sample)
@@ -43,7 +37,8 @@ class Backtester:
             df["Entry_Price"] = df["Entry_Price"].ffill()
             df["Return"] = df["Close"].pct_change()                     # asset percentage variation (in relation to previous sample)
             df["Strategy"] = df["Position"]*df["Return"]                # return of the strategy
-    
+            df["Strategy"] = df["Strategy"].fillna(0.001)
+            
             # compare benchmark vs current strategy
             df["Cumulative_Market"] = (1 +df["Return"]).cumprod()       # cumulative return buy & hold strategy
             df["Cumulative_Strategy"] = (1 +df["Strategy"]).cumprod()   # cumulative return current strategy

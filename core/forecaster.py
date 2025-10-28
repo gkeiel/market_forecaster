@@ -2,6 +2,8 @@ import json
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import ExtraTreesRegressor
 
 
 # =====================================================
@@ -38,10 +40,14 @@ class Forecaster:
         Y = np.array(Y)
 
         # train decision trees
-        if method == "RF":
-            model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)
-        elif method == "DT":
+        if method == "DT":
             model = DecisionTreeRegressor(max_depth=self.max_depth)
+        elif method == "RF":
+            model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)
+        elif method == "GB":
+            model = GradientBoostingRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
+        elif method == "ET":
+            model = ExtraTreesRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
         model.fit(X, Y)
         self.model = model
 
