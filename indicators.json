@@ -1,0 +1,6 @@
+{
+    "indicators": [
+        { "ind_t": "DT", "ind_p": [10, 20] },
+        { "ind_t": "RF", "ind_p": [10, 20] }
+    ]
+}

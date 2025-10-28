@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+
+data/debug/*
+data/report/*
+data/results/*
+!data/debug/.gitkeep
+!data/report/.gitkeep
+!data/results/.gitkeep
