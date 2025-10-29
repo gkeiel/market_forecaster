@@ -6,6 +6,8 @@ As main advantages, the project provides:
 - uses **supervised machine learning** to generate trading signals.
 - **open-source code**, allowing **flexibility in specifying** machine learning models and comparing all strategies.
 
+Telegram open channel with daily signals run via GitHub Actions. Anyone can sign up to get a feel for what this bot can offer.
+[t.me/market_forecasting_public](https://t.me/market_forecaster_public)
 
 ## 📊 Features
 
