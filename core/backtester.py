@@ -9,6 +9,7 @@ matplotlib.use("Agg")
 class Backtester:
     def __init__(self, df, file_config="config.json"):
         self.df = df.copy()
+        self.volume_ma = 10
         self.load_config(file_config)
         
     def load_config(self, path):
@@ -28,7 +29,11 @@ class Backtester:
             df["Signal_Length"] = df["Signal"].groupby((df["Signal"] != df["Signal"].shift()).cumsum()).cumcount() +1   # consecutive samples of same signal (signal length)
             df.loc[df["Signal"] == 0, "Signal_Length"] = 0                                                              # length is zero while there is no signal
             df.loc[df["Signal_Length"] < 3, "Signal"] = 0
-
+            
+            # generate confirmation signals
+            df["Volume_MA"] = df["Volume"].rolling(window=self.volume_ma).mean()
+            df["Volume_Strength"] = (df["Volume"] -df["Volume_MA"])/df["Volume_MA"]
+            
             # simulate execution (backtest)
             df["Position"] = df["Signal"].shift(1)                      # simulate position (using previous sample)
             df.loc[df["Position"] == -1, "Position"] = 0                # comment if also desired selling operations  
