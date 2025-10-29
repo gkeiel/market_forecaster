@@ -60,14 +60,13 @@ These options allow the user to compare the performance of different approaches 
 
 - **Backtest chart with Random Forest**
   
-  After running `market_forecaster.py` it generates strategy charts, spreadsheets for each ticker, and a summary with best results. The generated figures follow the example below:
-
-  <p align="center">
-     <img width="733" height="395" alt="TSLA_SMA_20_30" src="https://github.com/user-attachments/assets/cf810a16-0d6e-4f8d-89ad-51303f7a24b8" />
-     <img width="733" height="395" alt="TSLA_SMA_20_30_backtest" src="https://github.com/user-attachments/assets/8a3ace24-e11c-42fb-a812-37a192b757bc" />
-  </p>
+  After running `market_forecaster.py` it generates strategy charts, spreadsheets for each ticker, and a summary with results sorted by best. The generated figures follow the example below:
+   <p align="center">
+      <img width="733" height="395" alt="PETR4_GB_10_10_5_forecast" src="https://github.com/user-attachments/assets/219b5e9d-6c65-46a3-ab5d-fead268bff6e" />
+      <img width="733" height="395" alt="PETR4_GB_10_10_5_backtest" src="https://github.com/user-attachments/assets/a8bfe55b-e935-4f62-8acf-e3d6e84e2562" />
+   </p>
   
-  Notice that the asset ends the evaluated periodo at 1.75 times its initial price, so a Buy & hold strategy would yield 175% return. On the other hand, strictly following the SMA 20/30 strategy would produce above 250% return over the same period, excluding any trasactions fees. Furthermore, short selling operations are ignored by default in calculations assuming there exist borrowing fees involved, though they can easily be enabled in the backtest.
+  Notice that the asset ends the evaluated period near its initial price, so a Buy & hold strategy would yield approximately a 105% return. On the other hand, strictly following the machine learning strategy with Gradient Boosting would produce above 140% return over the same period, excluding any trasactions fees. Furthermore, short selling operations are ignored by default in calculations assuming there exist borrowing fees involved, though they can easily be enabled in the backtest.
 
   
 ## 🧩 Project Structure
