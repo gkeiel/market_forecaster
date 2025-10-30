@@ -4,6 +4,9 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import ExtraTreesRegressor
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.linear_model import LinearRegression
+from statsmodels.tsa.arima.model import ARIMA
 
 
 # =====================================================
@@ -39,8 +42,10 @@ class Forecaster:
         X = np.array(X)
         Y = np.array(Y)
 
-        # train decision trees
-        if method == "DT":
+        # supervised machine learning methods
+        if method == "LR":
+            model = LinearRegression()
+        elif method == "DT":
             model = DecisionTreeRegressor(max_depth=self.max_depth)
         elif method == "RF":
             model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)
@@ -48,8 +53,19 @@ class Forecaster:
             model = GradientBoostingRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
         elif method == "ET":
             model = ExtraTreesRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
+        elif method == "KNN":
+            model = KNeighborsRegressor(n_neighbors=self.max_depth)
         model.fit(X, Y)
         self.model = model
+                
+        # statistical methods
+        #if method == "ARIMA":
+        #    p = 1
+        #    d = 1
+        #    q = 1
+        #    model = ARIMA(Y, order=(p, d, q))
+        #    model = model.fit()
+        #self.model = model
 
         # predictions
         y_hat = model.predict(X)
