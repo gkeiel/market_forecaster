@@ -91,13 +91,8 @@ def main():
         payload = {"chat_id": notifier.CHAT_ID, "text": f"<b>Summary:</b>\n{msg}", "parse_mode": "HTML", "disable_web_page_preview": True}
         sum_id  = notifier.send_telegram(payload)
         
-        #payload = {"chat_id": notifier.CHAT_ID, "message_id": sum_id, "disable_notification": True}
-        #notifier.pin_telegram(payload)
     except Exception as err:
         print("Telegram error:", err)
-        
-    # export report
-    Exporter().export_report(report)
 
 
 if __name__ == "__main__":

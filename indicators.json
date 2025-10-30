@@ -1,5 +1,6 @@
 {
     "indicators": [
+        { "ind_t": "ARIMA", "ind_p": [1, 1, 1] },
         { "ind_t": "LR", "ind_p": [10, 5, 5] },
         { "ind_t": "RF", "ind_p": [10, 5, 5] },
         { "ind_t": "RF", "ind_p": [10, 10, 5] },

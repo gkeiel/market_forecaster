@@ -28,47 +28,52 @@ class Forecaster:
         df = self.df
         method = self.indicator.get("ind_t", "RF")
         params = self.indicator.get("ind_p", [])        
-        self.n_estimators = params[0]
-        self.max_depth    = params[1]
-        self.n_lags       = params[2]
         
-        y  = df["Close"]
+        # supervised machine learning methods    
+        if method != "ARIMA":
+            y  = df["Close"]
+            self.n_estimators, self.max_depth, self.n_lags = params
+            
+            # build features for ML model
+            X, Y = [], []
+            for i in range(self.n_lags, len(y)):
+                X.append(y.iloc[i-self.n_lags:i])
+                Y.append(y.iloc[i])
+            X = np.array(X)
+            Y = np.array(Y)
 
-        # build features for ML model
-        X, Y = [], []
-        for i in range(self.n_lags, len(y)):
-            X.append(y.iloc[i-self.n_lags:i])
-            Y.append(y.iloc[i])
-        X = np.array(X)
-        Y = np.array(Y)
+            if method == "LR":
+                model = LinearRegression()
+            elif method == "DT":
+                model = DecisionTreeRegressor(max_depth=self.max_depth)
+            elif method == "RF":
+                model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)
+            elif method == "GB":
+                model = GradientBoostingRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
+            elif method == "ET":
+                model = ExtraTreesRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
+            elif method == "KNN":
+                model = KNeighborsRegressor(n_neighbors=self.max_depth)
+            model.fit(X, Y)
+            
+            # predictions
+            y_hat = model.predict(X)
 
-        # supervised machine learning methods
-        if method == "LR":
-            model = LinearRegression()
-        elif method == "DT":
-            model = DecisionTreeRegressor(max_depth=self.max_depth)
-        elif method == "RF":
-            model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)
-        elif method == "GB":
-            model = GradientBoostingRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
-        elif method == "ET":
-            model = ExtraTreesRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
-        elif method == "KNN":
-            model = KNeighborsRegressor(n_neighbors=self.max_depth)
-        model.fit(X, Y)
-        self.model = model
-                
         # statistical methods
-        #if method == "ARIMA":
-        #    p = 1
-        #    d = 1
-        #    q = 1
-        #    model = ARIMA(Y, order=(p, d, q))
-        #    model = model.fit()
-        #self.model = model
-
-        # predictions
-        y_hat = model.predict(X)
+        elif method == "ARIMA":
+            y  = df["Close"]#.reset_index(drop=True) # remove temporal index
+            p, d, q = params
+            
+            self.n_lags = max(p, q)
+            model = ARIMA(y, order=(p, d, q))
+            model_fit = model.fit()
+            # print(model.params)
+            
+            # predictions
+            y_hat = model_fit.predict(start=self.n_lags, end=len(y)-1)
+            
+        # save model            
+        self.model = model
         
         # add to dataframe
         df["Predicted_Close"] = np.nan

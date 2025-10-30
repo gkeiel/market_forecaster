@@ -88,7 +88,7 @@ These options allow the user to compare the performance of different approaches 
 - Contributions are welcome! Open an issue or submit a pull request.
 - Future improvements and new features may be added, including:
   - more machine learning methods; ✅
-  - statistical methods (ARIMA);
+  - statistical methods (ARIMA); ✅
   - improve objective function with new weights and presets.
 
 
