@@ -1,16 +1,11 @@
 {
     "indicators": [
+        { "ind_t": "LR", "ind_p": [10, 5, 5] },
         { "ind_t": "RF", "ind_p": [10, 5, 5] },
         { "ind_t": "RF", "ind_p": [10, 10, 5] },
-        { "ind_t": "RF", "ind_p": [10, 20, 5] },
-        { "ind_t": "RF", "ind_p": [10, 30, 5] },
         { "ind_t": "GB", "ind_p": [10, 5, 5] },
         { "ind_t": "GB", "ind_p": [10, 10, 5] },
-        { "ind_t": "GB", "ind_p": [10, 20, 5] },
-        { "ind_t": "GB", "ind_p": [10, 30, 5] },
         { "ind_t": "ET", "ind_p": [10, 5, 5] },
-        { "ind_t": "ET", "ind_p": [10, 10, 5] },
-        { "ind_t": "ET", "ind_p": [10, 20, 5] },
-        { "ind_t": "ET", "ind_p": [10, 30, 5] }
+        { "ind_t": "ET", "ind_p": [10, 10, 5] }
     ]
 }
