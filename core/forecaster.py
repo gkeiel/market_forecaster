@@ -1,4 +1,4 @@
-import json
+import json, warnings
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -61,16 +61,17 @@ class Forecaster:
 
         # statistical methods
         elif method == "ARIMA":
-            y  = df["Close"]#.reset_index(drop=True) # remove temporal index
+            y = df["Close"]
             p, d, q = params
             
-            self.n_lags = max(p, q)
-            model = ARIMA(y, order=(p, d, q))
-            model_fit = model.fit()
-            # print(model.params)
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=UserWarning)
+                self.n_lags = max(p, q)
+                model = ARIMA(y, order=(p, d, q)).fit()
+                # print(model.params)
             
             # predictions
-            y_hat = model_fit.predict(start=self.n_lags, end=len(y)-1)
+            y_hat = model.predict(start=self.n_lags, end=len(y)-1)
             
         # save model            
         self.model = model
@@ -83,6 +84,11 @@ class Forecaster:
     def predict_next(self):
         if self.model is None:
             raise ValueError("No existing model.")
-        last_Y = self.df["Close"].iloc[-self.n_lags:].values.reshape(1, -1)               
-        y_hat  = self.model.predict(last_Y)[0]
+        method = self.indicator.get("ind_t")
+        
+        if method == "ARIMA":
+            y_hat  = float(self.model.forecast(steps=1).iloc[0])
+        else:
+            last_Y = self.df["Close"].iloc[-self.n_lags:].values.reshape(1, -1)               
+            y_hat  = self.model.predict(last_Y)[0]
         return y_hat

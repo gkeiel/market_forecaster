@@ -25,7 +25,7 @@ class Exporter:
 
     def export_best_results(self, bst_data):
         # export best results (a spreadsheet for each ticker)
-        with pd.ExcelWriter("data/results/results_best.xlsx", engine="openpyxl") as writer:
+        with pd.ExcelWriter("data/results/results.xlsx", engine="openpyxl") as writer:
             for ticker, bst_df in bst_data.items():
                 # write to .xlsx 
                 bst_df.to_excel(writer, sheet_name=ticker[:10], index=False)
