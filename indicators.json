@@ -1,11 +1,20 @@
 {
     "indicators": [
-        { "ind_t": "LR", "ind_p": [10, 5, 5] },
-        { "ind_t": "RF", "ind_p": [10, 5, 5] },
-        { "ind_t": "RF", "ind_p": [10, 10, 5] },
+        { "ind_t": "ARIMA", "ind_p": [1, 1, 1] },
+        { "ind_t": "ARIMA", "ind_p": [2, 1, 2] },
+        { "ind_t": "ARIMA", "ind_p": [3, 1, 3] },
+        { "ind_t": "ARIMA", "ind_p": [4, 1, 4] },
+        { "ind_t": "ARIMA", "ind_p": [5, 1, 5] },
+        { "ind_t": "ARIMA", "ind_p": [6, 1, 6] },
+        { "ind_t": "ARIMA", "ind_p": [7, 1, 7] },
+        { "ind_t": "ARIMA", "ind_p": [8, 1, 8] },
+        { "ind_t": "ARIMA", "ind_p": [9, 1, 9] },
+        { "ind_t": "ARIMA", "ind_p": [10, 1, 10] },
         { "ind_t": "GB", "ind_p": [10, 5, 5] },
         { "ind_t": "GB", "ind_p": [10, 10, 5] },
-        { "ind_t": "ET", "ind_p": [10, 5, 5] },
-        { "ind_t": "ET", "ind_p": [10, 10, 5] }
+        { "ind_t": "GB", "ind_p": [10, 15, 5] },
+        { "ind_t": "GB", "ind_p": [10, 20, 5] },
+        { "ind_t": "RF", "ind_p": [10, 5, 5] },
+        { "ind_t": "ET", "ind_p": [10, 5, 5] }
     ]
 }

@@ -42,7 +42,7 @@ class Backtester:
             df["Entry_Price"] = df["Entry_Price"].ffill()
             df["Return"] = df["Close"].pct_change()                     # asset percentage variation (in relation to previous sample)
             df["Strategy"] = df["Position"]*df["Return"]                # return of the strategy
-            df["Strategy"] = df["Strategy"].fillna(0.001)
+            df["Strategy"] = df["Strategy"].fillna(0.0001)
             
             # compare benchmark vs current strategy
             df["Cumulative_Market"] = (1 +df["Return"]).cumprod()       # cumulative return buy & hold strategy
@@ -67,7 +67,7 @@ class Backtester:
         # save results       
         plt.figure(figsize=(12,6))
         plt.plot(self.df.index, self.df["Close"], label=f"{ticker}")
-        plt.plot(self.df.index, self.df["Predicted_Close"], label="Predictions")
+        plt.plot(self.df.index, self.df["Predicted_Close"], label=f"Predictions {ind_t}{'/'.join(params)}")
         plt.title(f"{ticker} - Price")
         plt.legend()
         plt.grid(True)

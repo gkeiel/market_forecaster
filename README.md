@@ -27,6 +27,7 @@ The project currently supports **supervisioned machine learning** strategies for
 - **Gradient Boosting Regressor**
 - **Extra Trees Regressor**
 - **K Neighbors Regressor**
+- **Autoregressive Integrated Moving Average (ARIMA)** models
 
 
 These options allow the user to compare the performance of different approaches within the selected market.
@@ -72,7 +73,7 @@ These options allow the user to compare the performance of different approaches 
       <img width="733" height="395" alt="PETR4_GB_10_10_5_backtest" src="https://github.com/user-attachments/assets/a8bfe55b-e935-4f62-8acf-e3d6e84e2562" />
    </p>
   
-  Notice that the asset ends the evaluated period near its initial price, so a Buy & hold strategy would yield approximately a 105% return. On the other hand, strictly following the machine learning strategy with Gradient Boosting would produce above 140% return over the same period, excluding any trasactions fees. Furthermore, short selling operations are ignored by default in calculations assuming there exist borrowing fees involved, though they can easily be enabled in the backtest.
+  Notice that the asset ends the evaluated period near its initial price, so a Buy & Hold strategy would yield approximately a 105% return. On the other hand, strictly following the machine learning strategy with Gradient Boosting would produce above 160% return over the same period, excluding any trasactions fees. Furthermore, short selling operations are ignored by default in calculations assuming there exist borrowing fees involved, though they can easily be enabled in the backtest.
 
   
 ## 🧩 Project Structure
@@ -90,8 +91,9 @@ These options allow the user to compare the performance of different approaches 
 - Contributions are welcome! Open an issue or submit a pull request.
 - Future improvements and new features may be added, including:
   - more machine learning methods; ✅
-  - statistical methods (ARIMA);
-  - improve objective function with new weights and presets.
+  - statistical methods (ARIMA); ✅
+  - improve objective function with new weights and presets;
+  - use optimizer for the objective function.
 
 
 ## 🤝 Support

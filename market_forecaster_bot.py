@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from core.loader import Loader
 from core.backtester import Backtester
 from core.forecaster import Forecaster
@@ -10,7 +9,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 # import best strategies from strategies.csv: tickers, indicators
-csv_file   = "data/results/strategies.csv"                                                      # from local folder
+#csv_file   = "data/results/strategies.csv"
+csv_file   = "https://drive.google.com/uc?export=download&id=1Ng0WSH98csTZMaUCLfEKV9sBWdDhajVl"
 strategies = Strategies().import_strategies(csv_file)
 tickers    = list(strategies.keys())
 
@@ -91,13 +91,8 @@ def main():
         payload = {"chat_id": notifier.CHAT_ID, "text": f"<b>Summary:</b>\n{msg}", "parse_mode": "HTML", "disable_web_page_preview": True}
         sum_id  = notifier.send_telegram(payload)
         
-        #payload = {"chat_id": notifier.CHAT_ID, "message_id": sum_id, "disable_notification": True}
-        #notifier.pin_telegram(payload)
     except Exception as err:
         print("Telegram error:", err)
-        
-    # export report
-    Exporter().export_report(report)
 
 
 if __name__ == "__main__":
