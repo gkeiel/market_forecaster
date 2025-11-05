@@ -13,7 +13,7 @@ from statsmodels.tsa.arima.model import ARIMA
 #  Forecaster
 # =====================================================
 class Forecaster:
-    def __init__(self, indicator, df, file_config="config.json"):
+    def __init__(self, indicator, df, file_config="config/config.json"):
         self.indicator = indicator
         self.df = df.copy()
         self.model  = None
@@ -27,21 +27,27 @@ class Forecaster:
     def predictions(self):
         df = self.df
         method = self.indicator.get("ind_t", "RF")
-        params = self.indicator.get("ind_p", [])        
+        params = self.indicator.get("ind_p", [])
+        y  = df["Close"]  
+        N  = 100
         
         # supervised machine learning methods    
         if method != "ARIMA":
-            y  = df["Close"]
             self.n_estimators, self.max_depth, self.n_lags = params
             
-            # build features for ML model
+            # build features for ML model:
             X, Y = [], []
             for i in range(self.n_lags, len(y)):
                 X.append(y.iloc[i-self.n_lags:i])
                 Y.append(y.iloc[i])
-            X = np.array(X)
-            Y = np.array(Y)
+            X, Y= np.array(X), np.array(Y)
+            
+            # train data
+            X_train, Y_train = X[:N], Y[:N]
 
+            # test data
+            X_test, Y_test = X[N:], Y[N:]
+            
             if method == "LR":
                 model = LinearRegression()
             elif method == "DT":
@@ -54,31 +60,32 @@ class Forecaster:
                 model = ExtraTreesRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth)
             elif method == "KNN":
                 model = KNeighborsRegressor(n_neighbors=self.max_depth)
-            model.fit(X, Y)
+            model.fit(X_train, Y_train)
             
             # predictions
-            y_hat = model.predict(X)
+            y_hat = model.predict(X_test)
 
         # statistical methods
         elif method == "ARIMA":
-            y = df["Close"]
             p, d, q = params
             
             with warnings.catch_warnings():
+                y_train, y_test = y.iloc[:N], y.iloc[N:]
                 warnings.filterwarnings("ignore", category=UserWarning)
+                warnings.filterwarnings("ignore", category=FutureWarning)
                 self.n_lags = max(p, q)
-                model = ARIMA(y, order=(p, d, q)).fit()
+                model = ARIMA(y_train, order=(p, d, q)).fit()
                 # print(model.params)
             
-            # predictions
-            y_hat = model.predict(start=self.n_lags, end=len(y)-1)
+                # predictions
+                y_hat = model.forecast(steps=len(y_test))
             
         # save model            
         self.model = model
         
         # add to dataframe
         df["Predicted_Close"] = np.nan
-        df.loc[df.index[self.n_lags:], "Predicted_Close"] = y_hat
+        df.loc[df.index[self.n_lags+N:], "Predicted_Close"] = y_hat
         return df
     
     def predict_next(self):

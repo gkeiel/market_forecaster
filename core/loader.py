@@ -7,7 +7,7 @@ from datetime import datetime
 #  Loader
 # =====================================================
 class Loader:
-    def __init__(self, file_config="config.json", file_tickers=None, file_indicators=None, market="BR"):
+    def __init__(self, file_config="config/config.json", file_tickers=None, file_indicators=None, market="BR"):
         self.file_tickers = file_tickers
         self.file_indicators = file_indicators
         self.market = market

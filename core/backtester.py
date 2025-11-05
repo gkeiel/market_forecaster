@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 #  Backtester
 # =====================================================
 class Backtester:
-    def __init__(self, df, file_config="config.json"):
+    def __init__(self, df, file_config="config/config.json"):
         self.df = df.copy()
         self.volume_ma = 10
         self.load_config(file_config)

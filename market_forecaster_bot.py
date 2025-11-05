@@ -9,8 +9,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 # import best strategies from strategies.csv: tickers, indicators
-#csv_file   = "data/results/strategies.csv"
-csv_file   = "https://drive.google.com/uc?export=download&id=1Ng0WSH98csTZMaUCLfEKV9sBWdDhajVl"
+csv_file   = "data/results/strategies.csv"
+#csv_file   = "https://drive.google.com/uc?export=download&id=1Ng0WSH98csTZMaUCLfEKV9sBWdDhajVl"
 strategies = Strategies().import_strategies(csv_file)
 tickers    = list(strategies.keys())
 
@@ -30,7 +30,7 @@ def main():
         indicator = {"ind_t": ind_t, "ind_p": [int(p) for p in params]}
         
         # download and backtest
-        loader = Loader("config.json", "tickers.txt", "indicators.txt")
+        loader = Loader("config/config.json", "config/tickers.txt", "config/indicators.txt")
         df = loader.download_data(ticker)
         forecaster = Forecaster(indicator, df)
         df = forecaster.predictions()

@@ -8,7 +8,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():
-    loader = Loader("config.json", "tickers.json", "indicators.json")
+    loader = Loader("config/config.json", "config/tickers.json", "config/indicators.json")
 
     # initialize cache dictionaries
     raw_data = {}

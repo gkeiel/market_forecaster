@@ -7,7 +7,7 @@ from datetime import datetime
 #  Exporter
 # =====================================================
 class Exporter:
-    def __init__(self, file_config="config.json"):
+    def __init__(self, file_config="config/config.json"):
         self.load_config(file_config)
 
     def load_config(self, path):
