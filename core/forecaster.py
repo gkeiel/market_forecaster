@@ -41,11 +41,11 @@ class Forecaster:
                 Y.append(y.iloc[i])
             X, Y= np.array(X), np.array(Y)
             
-            # train and test data
+            # train data and test data
             X_train, Y_train = X[:self.N], Y[:self.N]
             X_test, Y_test   = X[self.N:], Y[self.N:]
             
-            # methods
+            # method and trainning
             if method == "LR":
                 model = LinearRegression()
             elif method == "DT":
@@ -68,14 +68,22 @@ class Forecaster:
             p, d, q = params
             
             with warnings.catch_warnings():
-                self.n_lags = 0
-                y_train, y_test = y.iloc[:self.N], y.iloc[self.N:]
                 warnings.filterwarnings("ignore", category=UserWarning)
                 warnings.filterwarnings("ignore", category=FutureWarning)
+                self.n_lags = 0
+                y_train, y_test = y.iloc[:self.N], y.iloc[self.N:]
+                
+                # model class and trainning
                 model = ARIMA(y_train, order=(p, d, q)).fit()
-            
-                # predictions
-                y_hat = model.forecast(steps=len(y_test))
+                
+                y_history = list(y_train.values)
+                y_hat = []
+                for k in range(len(y_test)):
+                    # predictions
+                    y_pred = model.forecast(steps=1).iloc[0]
+                    y_hat.append(y_pred)
+                    y_history.append(y_test.iloc[k])
+                    model = model.append([y_test.iloc[k]], refit=False)
             y_hat = np.asarray(y_hat).ravel()
                 
         # save model            

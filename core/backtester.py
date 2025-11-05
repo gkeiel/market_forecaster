@@ -16,7 +16,8 @@ class Backtester:
             config = json.load(f)
             self.N = config.get("N_train", 100)
             self.volume_ma = config.get("backtest", {}).get("volume_ma", 10)
-            
+            self.persistence = config.get("backtest", {}).get("persistence", 3)
+           
     def run_strategy(self, indicator):
         try:
             df     = self.df
@@ -28,7 +29,7 @@ class Backtester:
             df.loc[df["Predicted_Close"] < (1-0.005)*df["Close"], "Signal"] = -1
             df["Signal_Length"] = df["Signal"].groupby((df["Signal"] != df["Signal"].shift()).cumsum()).cumcount() +1   # consecutive samples of same signal (signal length)
             df.loc[df["Signal"] == 0, "Signal_Length"] = 0                                                              # length is zero while there is no signal
-            df.loc[df["Signal_Length"] < 5, "Signal"] = 0
+            df.loc[df["Signal_Length"] < self.persistence, "Signal"] = 0
             
             # generate confirmation signals
             df["Volume_MA"] = df["Volume"].rolling(window=self.volume_ma).mean()
