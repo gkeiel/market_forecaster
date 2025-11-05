@@ -9,13 +9,13 @@ matplotlib.use("Agg")
 class Backtester:
     def __init__(self, df, file_config="config/config.json"):
         self.df = df.copy()
-        self.volume_ma = 10
         self.load_config(file_config)
         
     def load_config(self, path):
         with open(path, "r", encoding="utf-8") as f:
             config = json.load(f)
-            cfg    = config.get("backtest", {})
+            self.N = config.get("N_train", 100)
+            self.volume_ma = config.get("backtest", {}).get("volume_ma", 10)
             
     def run_strategy(self, indicator):
         try:
@@ -28,7 +28,7 @@ class Backtester:
             df.loc[df["Predicted_Close"] < (1-0.005)*df["Close"], "Signal"] = -1
             df["Signal_Length"] = df["Signal"].groupby((df["Signal"] != df["Signal"].shift()).cumsum()).cumcount() +1   # consecutive samples of same signal (signal length)
             df.loc[df["Signal"] == 0, "Signal_Length"] = 0                                                              # length is zero while there is no signal
-            df.loc[df["Signal_Length"] < 3, "Signal"] = 0
+            df.loc[df["Signal_Length"] < 5, "Signal"] = 0
             
             # generate confirmation signals
             df["Volume_MA"] = df["Volume"].rolling(window=self.volume_ma).mean()
@@ -41,8 +41,9 @@ class Backtester:
             df["Entry_Price"] = df["Close"].where(df["Trade"] == 1)     # entry price
             df["Entry_Price"] = df["Entry_Price"].ffill()
             df["Return"] = df["Close"].pct_change()                     # asset percentage variation (in relation to previous sample)
+            df.loc[:df.index[self.N-1], "Return"] = 0.0
             df["Strategy"] = df["Position"]*df["Return"]                # return of the strategy
-            df["Strategy"] = df["Strategy"].fillna(0.0001)
+            df["Strategy"] = df["Strategy"].fillna(0.00001)
             
             # compare benchmark vs current strategy
             df["Cumulative_Market"] = (1 +df["Return"]).cumprod()       # cumulative return buy & hold strategy
@@ -64,10 +65,12 @@ class Backtester:
     def plot_res(self, label):
         ticker, ind_t, *params = label.split("_")
 
+        df = self.df.iloc[self.N:].copy()
+        
         # save results       
         plt.figure(figsize=(12,6))
-        plt.plot(self.df.index, self.df["Close"], label=f"{ticker}")
-        plt.plot(self.df.index, self.df["Predicted_Close"], label=f"Predictions {ind_t}{'/'.join(params)}")
+        plt.plot(df.index, df["Close"], label=f"{ticker}")
+        plt.plot(df.index, df["Predicted_Close"], label=f"Predictions {ind_t}{'/'.join(params)}")
         plt.title(f"{ticker} - Price")
         plt.legend()
         plt.grid(True)
@@ -75,8 +78,8 @@ class Backtester:
         plt.close()
 
         plt.figure(figsize=(12,6))
-        plt.plot(self.df.index, self.df["Cumulative_Market"], label="Buy & Hold")
-        plt.plot(self.df.index, self.df["Cumulative_Strategy"], label="Strategy")
+        plt.plot(df.index, df["Cumulative_Market"], label="Buy & Hold")
+        plt.plot(df.index, df["Cumulative_Strategy"], label="Strategy")
         plt.title(f"{ticker} - Backtest {ind_t}{'/'.join(params)}")
         plt.legend()
         plt.grid(True)

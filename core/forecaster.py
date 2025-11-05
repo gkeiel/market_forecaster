@@ -22,14 +22,13 @@ class Forecaster:
     def load_config(self, path):
         with open(path, "r", encoding="utf-8") as f:
             config = json.load(f)
-            cfg    = config.get("forecast", {})
+            self.N = config.get("N_train", 100)
                     
     def predictions(self):
         df = self.df
         method = self.indicator.get("ind_t", "RF")
         params = self.indicator.get("ind_p", [])
         y  = df["Close"]  
-        N  = 100
         
         # supervised machine learning methods    
         if method != "ARIMA":
@@ -42,12 +41,11 @@ class Forecaster:
                 Y.append(y.iloc[i])
             X, Y= np.array(X), np.array(Y)
             
-            # train data
-            X_train, Y_train = X[:N], Y[:N]
-
-            # test data
-            X_test, Y_test = X[N:], Y[N:]
+            # train and test data
+            X_train, Y_train = X[:self.N], Y[:self.N]
+            X_test, Y_test   = X[self.N:], Y[self.N:]
             
+            # methods
             if method == "LR":
                 model = LinearRegression()
             elif method == "DT":
@@ -70,22 +68,22 @@ class Forecaster:
             p, d, q = params
             
             with warnings.catch_warnings():
-                y_train, y_test = y.iloc[:N], y.iloc[N:]
+                self.n_lags = 0
+                y_train, y_test = y.iloc[:self.N], y.iloc[self.N:]
                 warnings.filterwarnings("ignore", category=UserWarning)
                 warnings.filterwarnings("ignore", category=FutureWarning)
-                self.n_lags = max(p, q)
                 model = ARIMA(y_train, order=(p, d, q)).fit()
-                # print(model.params)
             
                 # predictions
                 y_hat = model.forecast(steps=len(y_test))
-            
+            y_hat = np.asarray(y_hat).ravel()
+                
         # save model            
         self.model = model
         
         # add to dataframe
         df["Predicted_Close"] = np.nan
-        df.loc[df.index[self.n_lags+N:], "Predicted_Close"] = y_hat
+        df.loc[df.index[self.N+self.n_lags:], "Predicted_Close"] = y_hat
         return df
     
     def predict_next(self):

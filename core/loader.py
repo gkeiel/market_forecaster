@@ -60,6 +60,8 @@ class Loader:
             df = yf.download(self.format_ticker(ticker), self.start, self.end, auto_adjust=True)
         except Exception as err:
             raise RuntimeError("Unexpected error in download_data.") from err
+        
+        # format data
         df.columns = df.columns.droplevel(1)    
         df = df[["Close", "Volume"]]
         return df
