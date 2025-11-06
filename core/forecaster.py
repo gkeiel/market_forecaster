@@ -72,7 +72,7 @@ class Forecaster:
                 y_train, y_test = y.iloc[:self.N], y.iloc[self.N:]
                 
                 # model class and trainning
-                model = ARIMA(y_train, order=(p, d, q)).fit()
+                model = ARIMA(y_train, order=(p, d, q), enforce_stationarity=False, enforce_invertibility=False).fit()
                 
                 y_history = list(y_train.values)
                 y_hat = []
