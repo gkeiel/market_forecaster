@@ -5,8 +5,6 @@ __pycache__/
 data/debug/*
 data/report/*
 data/results/*
-config/*
 !data/debug/.gitkeep
 !data/report/.gitkeep
 !data/results/.gitkeep
-!config/.gitkeep

@@ -1,0 +1,13 @@
+{
+  "start": "2023-01-01",
+
+  "preset": "balanced",
+
+  "N_train": 251,
+
+  "backtest": {
+    "persistence": 4,
+    "hysteresis": 0.5,
+    "volume_ma": 10
+  }
+}
