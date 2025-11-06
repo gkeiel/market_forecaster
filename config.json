@@ -1,9 +1,0 @@
-{
-  "start": "2024-01-01",
-
-  "preset": "balanced",
-
-  "backtest": {
-    "ma_volume": 10
-  }
-}

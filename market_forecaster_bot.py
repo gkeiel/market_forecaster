@@ -30,7 +30,7 @@ def main():
         indicator = {"ind_t": ind_t, "ind_p": [int(p) for p in params]}
         
         # download and backtest
-        loader = Loader("config.json", "tickers.txt", "indicators.txt")
+        loader = Loader("config/config.json", "config/tickers.txt", "config/indicators.txt")
         df = loader.download_data(ticker)
         forecaster = Forecaster(indicator, df)
         df = forecaster.predictions()

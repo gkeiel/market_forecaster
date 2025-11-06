@@ -7,27 +7,35 @@ from datetime import datetime
 #  Exporter
 # =====================================================
 class Exporter:
-    def __init__(self, file_config="config.json"):
+    def __init__(self, file_config="config/config.json"):
         self.load_config(file_config)
 
     def load_config(self, path):
         with open(path, "r", encoding="utf-8") as f:
             config = json.load(f)
             self.end = config.get("end", datetime.now())
+            
+    def round_dataframe(self, df, n=4):
+        df = df.copy()
+        float_cols = df.select_dtypes(include=["float"]).columns
+        df[float_cols] = df[float_cols].round(n)
+        return df        
         
     def export_dataframe(self, pro_data):
         # export dataframe for further analysis
         for ticker, ticker_debug in pro_data.items():
-            with pd.ExcelWriter(f"data/debug/{ticker}.xlsx", engine="openpyxl") as writer:
+            with pd.ExcelWriter(f"data/debug/{ticker}.xlsx", engine="xlsxwriter") as writer:
                 for sheet_name, df in ticker_debug.items():
                     # write to .xlsx
+                    df = self.round_dataframe(df)
                     df.to_excel(writer, sheet_name=sheet_name[:20])
 
     def export_best_results(self, bst_data):
         # export best results (a spreadsheet for each ticker)
-        with pd.ExcelWriter("data/results/results.xlsx", engine="openpyxl") as writer:
+        with pd.ExcelWriter("data/results/results.xlsx", engine="xlsxwriter") as writer:
             for ticker, bst_df in bst_data.items():
-                # write to .xlsx 
+                # write to .xlsx
+                bst_df = self.round_dataframe(bst_df)
                 bst_df.to_excel(writer, sheet_name=ticker[:10], index=False)
 
     def update_best_results(self, bst_data):

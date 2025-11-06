@@ -7,7 +7,7 @@ from datetime import datetime
 #  Loader
 # =====================================================
 class Loader:
-    def __init__(self, file_config="config.json", file_tickers=None, file_indicators=None, market="BR"):
+    def __init__(self, file_config="config/config.json", file_tickers=None, file_indicators=None, market="BR"):
         self.file_tickers = file_tickers
         self.file_indicators = file_indicators
         self.market = market
@@ -60,6 +60,8 @@ class Loader:
             df = yf.download(self.format_ticker(ticker), self.start, self.end, auto_adjust=True)
         except Exception as err:
             raise RuntimeError("Unexpected error in download_data.") from err
+        
+        # format data
         df.columns = df.columns.droplevel(1)    
         df = df[["Close", "Volume"]]
         return df
