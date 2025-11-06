@@ -10,14 +10,14 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 def main():
     loader = Loader("config/config.json", "config/tickers.json", "config/indicators.json")
 
+    # import lists
+    tickers    = loader.load_tickers()
+    indicators = loader.load_indicators()
+    
     # initialize cache dictionaries
     raw_data = {}
     pro_data = {}
     res_data = {}
-
-    # import lists
-    tickers    = loader.load_tickers()
-    indicators = loader.load_indicators()
 
     try:
         # download data and run backtest (for each ticker and strategy)

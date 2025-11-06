@@ -27,8 +27,8 @@ class Forecaster:
     def predictions(self):
         df = self.df
         method = self.indicator.get("ind_t", "RF")
-        params = self.indicator.get("ind_p", [])
-        y  = df["Close"]  
+        params = self.indicator.get("ind_p", [50, 5, 5])
+        y  = df["Close"]
         
         # supervised machine learning methods    
         if method != "ARIMA":
@@ -46,9 +46,7 @@ class Forecaster:
             X_test, Y_test   = X[self.N:], Y[self.N:]
             
             # method and trainning
-            if method == "LR":
-                model = LinearRegression()
-            elif method == "DT":
+            if method == "DT":
                 model = DecisionTreeRegressor(max_depth=self.max_depth)
             elif method == "RF":
                 model = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, random_state=0)

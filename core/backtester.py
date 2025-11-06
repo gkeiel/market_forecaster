@@ -17,7 +17,8 @@ class Backtester:
             self.N = config.get("N_train", 100)
             self.volume_ma = config.get("backtest", {}).get("volume_ma", 10)
             self.persistence = config.get("backtest", {}).get("persistence", 3)
-           
+            self.hysteresis = config.get("backtest", {}).get("hysteresis", 0.5)
+            
     def run_strategy(self, indicator):
         try:
             df     = self.df
@@ -25,8 +26,8 @@ class Backtester:
     
             # generate buy/sell signals
             df["Signal"] = 0
-            df.loc[df["Predicted_Close"] > (1+0.005)*df["Close"], "Signal"] = 1
-            df.loc[df["Predicted_Close"] < (1-0.005)*df["Close"], "Signal"] = -1
+            df.loc[df["Predicted_Close"] > (1 +self.hysteresis/100)*df["Close"], "Signal"] = 1
+            df.loc[df["Predicted_Close"] < (1 -self.hysteresis/100)*df["Close"], "Signal"] = -1
             df["Signal_Length"] = df["Signal"].groupby((df["Signal"] != df["Signal"].shift()).cumsum()).cumcount() +1   # consecutive samples of same signal (signal length)
             df.loc[df["Signal"] == 0, "Signal_Length"] = 0                                                              # length is zero while there is no signal
             df.loc[df["Signal_Length"] < self.persistence, "Signal"] = 0
@@ -37,7 +38,7 @@ class Backtester:
             
             # simulate execution (backtest)
             df["Position"] = df["Signal"].shift(1)                      # simulate position (using previous sample)
-            df.loc[df["Position"] == -1, "Position"] = 0                # comment if also desired selling operations  
+            #df.loc[df["Position"] == -1, "Position"] = 0                # comment if also desired selling operations  
             df["Trade"] = df["Position"].diff().abs()                   # simulate trade
             df["Entry_Price"] = df["Close"].where(df["Trade"] == 1)     # entry price
             df["Entry_Price"] = df["Entry_Price"].ffill()
