@@ -8,6 +8,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():
+    # load config, tickers and ML indicators
     loader = Loader("config/config.json", "config/tickers.json", "config/indicators.json")
 
     # import lists
