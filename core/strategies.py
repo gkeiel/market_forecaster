@@ -5,7 +5,7 @@ import pandas as pd
 # =====================================================
 #  Strategy Manager
 # =====================================================
-class Strategies:
+class Strategies:    
     def __init__(self, file_config="config/config.json"):
         self.load_config(file_config)
 
@@ -14,12 +14,7 @@ class Strategies:
             config = json.load(f)
             self.preset = config.get("preset", "basic")
             
-    PRESET = {
-        "basic":     {"w_return": 1.0, "w_trades": 0.02, "w_sharpe": 0, "w_drdown": 0},
-        "balanced":  {"w_return": 1.0, "w_trades": 0.04, "w_sharpe": 0.01, "w_drdown": 0.05},
-        "agressive": {"w_return": 1.0, "w_trades": 0, "w_sharpe": 0.02, "w_drdown": 0},
-        "defensive": {"w_return": 1.0, "w_trades": 0.05, "w_sharpe": 0, "w_drdown": 0.05},
-    }
+
             
     def load_config(self, path):
         with open(path, "r", encoding="utf-8") as f:
@@ -59,3 +54,10 @@ class Strategies:
         # import strategies
         strategies = pd.read_csv(csv_file).set_index("Ticker").to_dict("index")
         return strategies
+    
+    PRESET = {
+        "basic":     {"w_return": 1.0, "w_trades": 0.02, "w_sharpe": 0, "w_drdown": 0},
+        "balanced":  {"w_return": 1.0, "w_trades": 0.04, "w_sharpe": 0.01, "w_drdown": 0.05},
+        "agressive": {"w_return": 1.0, "w_trades": 0, "w_sharpe": 0.02, "w_drdown": 0},
+        "defensive": {"w_return": 1.0, "w_trades": 0.05, "w_sharpe": 0, "w_drdown": 0.05},
+    }
