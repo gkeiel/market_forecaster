@@ -3,12 +3,12 @@
 This project provides a Python tool for **backtesting and selecting the best-performing strategies** to spot market time series, applying only **machine learning algorithms**.
 
 As main advantages, the project provides:
-- uses **supervised machine learning** to generate trading signals.
-- **recurring trading signals via Telegram** channel.
+- use of **supervised machine learning** to generate trading signals.
+- recurring **trading signals via Telegram** channel.
 - **open-source code**, allowing **flexibility in specifying** machine learning models and comparing all strategies.
 
-Telegram open channel with daily signals run via GitHub Actions. Anyone can sign up to get a feel for what this bot can offer.
-[t.me/market_forecasting_public](https://t.me/market_forecaster_public)
+Telegram open channel with daily signals run via GitHub Actions. Anyone can sign up to get a feel for what this bot can offer: [t.me/market_forecasting_public](https://t.me/market_forecasting_public)
+
 
 ## 📊 Features
 
@@ -16,7 +16,8 @@ Telegram open channel with daily signals run via GitHub Actions. Anyone can sign
 - **Machine-learning-based indicators**: Implements machine-learning-based strategies to identify possible trends.
 - **Strategy backtesting**: Runs historical backtests, generating figures and summaries for decision-making.
 - **Performance evaluation**: Assesses results using a weighted objective function and ranks the best strategies.
-- **Predict future prices**: Make predictions based on supervised machine learning, applying applying statistical models or non-parametric algorithmic models.
+- **Predict future prices**: Make predictions based on supervised machine learning, applying decision tree algorithms. 
+- **Telegram notifications**: Sends trading signals from the selected strategy directly to user smartphone or computer. 
 - **Configuration files**: Uses `.env` for private environment variables, `.json` for tickers list, `.json`for indicators list, and `.csv` for strategies list.
 
 ## 📈 Available Strategies
@@ -63,19 +64,45 @@ These options allow the user to compare the performance of different approaches 
      ```bash
      python market_forecaster.py
      ```
+   - To generate recurrent trading signals and notifications for each ticker, execute:
+     ```bash
+     python market_forecaster_bot.py
+     ```
+   - To automate the signal generation with GitHub Actions, create the repository secrets `TOKEN` and `CHAT_ID` for the preconfigured workflow.
 
 ## 🖼️ Output Examples
 
 - **Backtest chart with Random Forest**
   
   After running `market_forecaster.py` it generates strategy charts, spreadsheets for each ticker, and a summary with results sorted by best. The generated figures follow the example below:
-
-   <p align="center">
-      <img width="733" height="395" alt="B3SA3_RF_50_5_5_forecast" src="https://github.com/user-attachments/assets/96ae7c3c-802f-48eb-b9d3-4bd5688a4c67" />
-      <img width="733" height="395" alt="B3SA3_RF_50_5_5_backtest" src="https://github.com/user-attachments/assets/379c078e-e68b-4edc-957c-16f9efbaf072" />
-   </p>
   
-  Notice that the asset ends the evaluated period near its initial price, so a Buy & Hold strategy would yield approximately a zero return. On the other hand, strictly following the machine learning strategy with Random Forest Regressor would produce above 160% return over the same period, excluding any trasactions fees. Furthermore, short selling operations are being considered by default in calculations, though they can easily be disabled in the backtest.
+  <p align="center">
+    <img
+      src="images/B3SA3_RF.png"
+      alt="Optimization"
+      width="733"
+    />
+    <img
+      src="images/B3SA3_RF_backtest.png"
+      alt="Optimization"
+      width="733"
+    />
+  </p>
+  
+  Notice that the asset ends the evaluated period near its initial price, so a Buy & Hold strategy would yield approximately a 105% return. On the other hand, strictly following the machine learning strategy with Gradient Boosting would produce above 160% return over the same period, excluding any transactions fees. Furthermore, short selling operations are ignored by default in calculations assuming there exist borrowing fees involved, though they can easily be enabled in the backtest.
+
+- **Trading signals via Telegram**
+
+  After running `market_forecaster_bot.py`, it generates trading signals for the selected (best) strategies, as the example below:
+  <p align="center">
+    <img
+      src="images/telegram.png"
+      alt=" "
+      width="480"
+    />
+  </p>
+
+  Notice that a trading signal is generated for each asset, suggesting an up, down or neutral tendency based on the selected strategy and this trend duration, showing how many samples its side remained unchanged. Additionaly, volume data is displayed as strenght indicator for such trends.
 
   
 ## 🧩 Project Structure
