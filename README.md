@@ -4,7 +4,7 @@ This project provides a Python tool for **backtesting and selecting the best-per
 
 As main advantages, the project provides:
 - use of **supervised machine learning** to generate trading signals.
-- recurring **trading signals via Telegram** channel.
+- recurring **trading signals via Telegram channel and e-mail**.
 - **open-source code**, allowing **flexibility in specifying** machine learning models and comparing all strategies.
 
 Telegram open channel with daily signals run via GitHub Actions, which anyone can sign up to get a feel for what this bot can offer:
