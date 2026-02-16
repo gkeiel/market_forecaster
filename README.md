@@ -7,7 +7,8 @@ As main advantages, the project provides:
 - recurring **trading signals via Telegram** channel.
 - **open-source code**, allowing **flexibility in specifying** machine learning models and comparing all strategies.
 
-Telegram open channel with daily signals run via GitHub Actions. Anyone can sign up to get a feel for what this bot can offer: [t.me/market_forecasting_public](https://t.me/market_forecasting_public)
+Telegram open channel with daily signals run via GitHub Actions, which anyone can sign up to get a feel for what this bot can offer:
+[t.me/market_forecasting_public](https://t.me/market_forecasting_public)
 
 
 ## 📊 Features
@@ -18,6 +19,7 @@ Telegram open channel with daily signals run via GitHub Actions. Anyone can sign
 - **Performance evaluation**: Assesses results using a weighted objective function and ranks the best strategies.
 - **Predict future prices**: Make predictions based on supervised machine learning, applying decision tree algorithms. 
 - **Telegram notifications**: Sends trading signals from the selected strategy directly to user smartphone or computer. 
+- **E-mail reports**: Sends report with trading signals directly to user e-mail. 
 - **Configuration files**: Uses `.env` for private environment variables, `.json` for tickers list, `.json`for indicators list, and `.csv` for strategies list.
 
 ## 📈 Available Strategies
@@ -31,8 +33,53 @@ The project currently supports **supervisioned machine learning** strategies for
 - **K Neighbors Regressor**
 - **Autoregressive Integrated Moving Average (ARIMA)** models
 
+## 🧩 Structure
 
-These options allow the user to compare the performance of different approaches within the selected market.
+The project is organized around a modular architecture, where each class has a responsibility:
+- **Loader** manages the market configuration files.
+- **Indicator** generates machine-learning-based indicators.
+- **Forecaster** generates price forecasts.
+- **Backtester** runs trading signals on historical data and calculates performance metrics.
+- **Strategies** generates scores and ranks strategies based on a configurable objective function.
+- **Exporter** exports results to spreadsheets.
+- **Notifier** sends notifications via applications.
+
+The project has the following structure:
+
+ ```text
+ market_forecaster/ 
+ │  
+ ├── market_forecaster.py 
+ ├── market_forecaster_bot.py 
+ |  
+ ├── core/   
+ │   ├── __init__.py  
+ │   ├── loader.py  
+ │   ├── indicator.py  
+ │   ├── forecaster.py  
+ │   ├── backtester.py  
+ │   ├── strategies.py    
+ │   ├── exporter.py  
+ │   └── notifier.py  
+ │  
+ ├── config/  
+ │   ├── config.json  
+ │   ├── tickers.json  
+ │   └── indicators.json    
+ │  
+ ├── data/  
+ │   ├── debug/  
+ │   ├── report/  
+ │   └── results/ 
+ |       ├── best_results.xlsx 
+ │       ├── strategies.csv  
+ │       └── backtests.png    
+ │  
+ ├── images/  
+ ├── requirements.txt  
+ ├── README.md  
+ └── LICENSE  
+ ```
 
 ## ⚙️ How to Use
 
@@ -59,7 +106,15 @@ These options allow the user to compare the performance of different approaches 
    - Add the bot as channel administrator.
    - Add keys to `.env` file to be read by `market_forecaster.py`.
 
-4. **Run the script**
+4. **Configure E-mail**
+   - Create a **Gmail** account.
+   - Enable 2-Step verification in Google settings.
+   - Generate an **App Password** and use it in `EMAIL_PASSWORD`.
+   - Define the `SMTP_SERVER = smtp.gmail.com` and `SMTP_PORT = 587`.
+   - Define `EMAIL_FROM`and `EMAIL_TO`.
+   - Add these keys to `.env` file.
+
+5. **Run the script**
    - To run the batch of backtests, execute:
      ```bash
      python market_forecaster.py
@@ -104,6 +159,18 @@ These options allow the user to compare the performance of different approaches 
 
   Notice that a trading signal is generated for each asset, suggesting an up, down or neutral tendency based on the selected strategy and this trend duration, showing how many samples its side remained unchanged. Additionaly, volume data is displayed as strenght indicator for such trends.
 
+- **Trading signals via E-mail**
+
+  After running `market_forecaster_bot.py` it sends a daily report of trading signals using Gmail, as the example bellow:
+
+  <p align="center">
+    <img
+      src="images/email.png"
+      alt=" "
+      width="480"
+    />
+  </p>
+
   
 ## 🧩 Project Structure
 
@@ -121,6 +188,7 @@ These options allow the user to compare the performance of different approaches 
 - Future improvements and new features may be added, including:
   - more machine learning methods; ✅
   - statistical methods (ARIMA); ✅
+  - recurrent e-mail reports; ✅
   - improve objective function with new weights and presets;
   - use optimizer for the objective function.
 
