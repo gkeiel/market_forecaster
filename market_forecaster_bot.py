@@ -3,7 +3,6 @@ from core.loader import Loader
 from core.backtester import Backtester
 from core.forecaster import Forecaster
 from core.strategies import Strategies
-from core.exporter import Exporter
 from core.notifier import Notifier
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -13,6 +12,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 csv_file   = "https://drive.google.com/uc?export=download&id=1Ng0WSH98csTZMaUCLfEKV9sBWdDhajVl"
 strategies = Strategies().import_strategies(csv_file)
 tickers    = list(strategies.keys())
+notifier   = Notifier()
 
 def main():
     # initialize lists
@@ -73,10 +73,8 @@ def main():
         report.append(msg)
 
         # notifies via Telegram
-        notifier = Notifier()
         try:
-            payload = {"chat_id": notifier.CHAT_ID, "text": msg, "parse_mode": "HTML", "disable_web_page_preview": True}
-            msg_id  = notifier.send_telegram(payload)
+            msg_id  = notifier.notify(msg, pin=False)
             messages[a["Ticker"]] = msg_id
         except Exception as err:
             print("Telegram error:", err)
@@ -89,10 +87,13 @@ def main():
             summary.append(f'<a href="{link}">{ticker}</a>')
         msg   =  " ○ ".join(summary)
         payload = {"chat_id": notifier.CHAT_ID, "text": f"<b>Summary:</b>\n{msg}", "parse_mode": "HTML", "disable_web_page_preview": True}
-        sum_id  = notifier.send_telegram(payload)
+        notifier.send_telegram(payload)
         
     except Exception as err:
         print("Telegram error:", err)
+
+    # report in E-mail
+    notifier.send_email(subject="Market Forecaster - Daily Report", body="\n\n".join(report))
 
 
 if __name__ == "__main__":
