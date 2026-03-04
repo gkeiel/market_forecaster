@@ -20,13 +20,8 @@ class Notifier:
         self.SMTP_SERVER = os.getenv('SMTP_SERVER')
         self.SMTP_PORT   = os.getenv('SMTP_PORT')
         
-    def notify(self, msg, pin): 
-        msg_id = self.send_telegram({"chat_id": self.CHAT_ID, "text": msg, "parse_mode": "HTML", "disable_web_page_preview": True})
-        if pin and msg_id:
-            self.pin_telegram({"chat_id": self.CHAT_ID, "message_id": msg_id})            
-        return msg_id
-
-    def send_telegram(self, payload):
+    def send_telegram(self, msg):
+        payload = {"chat_id": self.CHAT_ID, "text": f"<b>Summary:</b>\n{msg}", "parse_mode": "HTML", "disable_web_page_preview": True}
         try:
             url = f"https://api.telegram.org/bot{self.TOKEN}/sendMessage"
             r = requests.post(url, json=payload, timeout=10)
@@ -36,15 +31,6 @@ class Notifier:
         except Exception as err:
             print(f"Telegram fail: {err}")
         return msg_id
-    
-    def pin_telegram(self, payload):
-        try:
-            url = f"https://api.telegram.org/bot{self.TOKEN}/pinChatMessage"
-            r = requests.post(url, json=payload, timeout=10)
-            r.raise_for_status()
-            print("Telegram pinned.")
-        except Exception as err:
-            print(f"Telergam pin fail: {err}")
         
     def send_email(self, subject, body):
         msg = EmailMessage()
