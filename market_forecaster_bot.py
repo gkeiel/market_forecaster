@@ -74,7 +74,7 @@ def main():
 
         # notifies via Telegram
         try:
-            msg_id  = notifier.notify(msg, pin=False)
+            msg_id = notifier.send_telegram(msg)
             messages[a["Ticker"]] = msg_id
         except Exception as err:
             print("Telegram error:", err)
@@ -86,8 +86,7 @@ def main():
             link = f"https://t.me/{notifier.CHAT_ID.lstrip('@')}/{msg_id}"
             summary.append(f'<a href="{link}">{ticker}</a>')
         msg   =  " ○ ".join(summary)
-        payload = {"chat_id": notifier.CHAT_ID, "text": f"<b>Summary:</b>\n{msg}", "parse_mode": "HTML", "disable_web_page_preview": True}
-        notifier.send_telegram(payload)
+        notifier.send_telegram(msg)
         
     except Exception as err:
         print("Telegram error:", err)
