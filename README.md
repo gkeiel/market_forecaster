@@ -4,7 +4,7 @@ This project provides a Python tool for **backtesting and selecting the best-per
 
 As main advantages, the project provides:
 - use of **supervised machine learning** to generate trading signals.
-- recurring **trading signals via Telegram channel and e-mail**.
+- recurring **trading signals via Telegram channel**.
 - **open-source code**, allowing **flexibility in specifying** machine learning models and comparing all strategies.
 
 Telegram open channel with daily signals run via GitHub Actions, which anyone can sign up to get a feel for what this bot can offer:
@@ -19,7 +19,6 @@ Telegram open channel with daily signals run via GitHub Actions, which anyone ca
 - **Performance evaluation**: Assesses results using a weighted objective function and ranks the best strategies.
 - **Predict future prices**: Make predictions based on supervised machine learning, applying decision tree algorithms. 
 - **Telegram notifications**: Sends trading signals from the selected strategy directly to user smartphone or computer. 
-- **E-mail reports**: Sends report with trading signals directly to user e-mail. 
 - **Configuration files**: Uses `.env` for private environment variables, `.json` for tickers list, `.json`for indicators list, and `.csv` for strategies list.
 
 ## 📈 Available Strategies
@@ -106,15 +105,7 @@ The project has the following structure:
    - Add the bot as channel administrator.
    - Add keys to `.env` file to be read by `market_forecaster.py`.
 
-4. **Configure E-mail**
-   - Create a **Gmail** account.
-   - Enable 2-Step verification in Google settings.
-   - Generate an **App Password** and use it in `EMAIL_PASSWORD`.
-   - Define the `SMTP_SERVER = smtp.gmail.com` and `SMTP_PORT = 587`.
-   - Define `EMAIL_FROM`and `EMAIL_TO`.
-   - Add these keys to `.env` file.
-
-5. **Run the script**
+4. **Run the script**
    - To run the batch of backtests, execute:
      ```bash
      python market_forecaster.py
@@ -156,22 +147,7 @@ The project has the following structure:
       width="480"
     />
   </p>
-
-  Notice that a trading signal is generated for each asset, suggesting an up, down or neutral tendency based on the selected strategy and this trend duration, showing how many samples its side remained unchanged. Additionaly, volume data is displayed as strenght indicator for such trends.
-
-- **Trading signals via E-mail**
-
-  After running `market_forecaster_bot.py` it sends a daily report of trading signals using Gmail, as the example bellow:
-
-  <p align="center">
-    <img
-      src="images/email.png"
-      alt=" "
-      width="480"
-    />
-  </p>
-
-  
+ 
 ## 🧩 Project Structure
 
 - `market_forecaster.py` → Main file for backtesting and selecting the best strategies.
@@ -186,17 +162,24 @@ The project has the following structure:
 
 - Contributions are welcome! Open an issue or submit a pull request.
 - Future improvements and new features may be added, including:
+  - improve objective function with new weights and presets;
   - more machine learning methods; ✅
   - statistical methods (ARIMA); ✅
-  - recurrent e-mail reports; ✅
-  - improve objective function with new weights and presets;
+  - WhatsApp notifications (Premium); ✅
+  - e-mail reports (Premium); ✅
   - use optimizer for the objective function.
 
+## 🚀 Premium Version
 
-## 🤝 Support
+The Premium version unlocks advanced features for professional automation and notifications. See the comparison:
 
-This repository is independently maintained, only in free time. If you find the code useful and wish to support its continued development, consider donating:
+| Feature                   | Free | Premium |
+|---------------------------|------|------|
+| Backtest                  |  ✅  |  ✅  |
+| Strategy evaluation       |  ✅  |  ✅  |
+| Telegram notifications    |  ✅  |  ✅  |
+| WhatsApp notifications    |  ❌  |  ✅  |
+| Gmail report              |  ❌  |  ✅  |
 
-- [PayPal](https://www.paypal.com/donate/?hosted_button_id=BF6E8J7P32KWE)  
-
-Your support helps keep the project alive and evolving, by adding new indicators, improvements, and documentation.
+If this project helped you, consider purchasing the Premium version:
+👉 https://payhip.com/b/PU9tc  
