@@ -181,5 +181,4 @@ The Premium version unlocks advanced features for professional automation and no
 | WhatsApp notifications    |  ❌  |  ✅  |
 | Gmail report              |  ❌  |  ✅  |
 
-If this project helped you, consider purchasing the Premium version:
-👉 https://payhip.com/b/PU9tc  
+If this project helped you, consider purchasing the Premium version: **currently unavailable**.
