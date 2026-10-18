@@ -6,7 +6,7 @@
   "N_train": 251,
 
   "backtest": {
-    "persistence": 4,
+    "persistence": 3,
     "hysteresis": 0.5,
     "volume_ma": 10
   }
