@@ -6,4 +6,4 @@ requests
 dotenv
 openpyxl
 scikit-learn
-statsmodels
+statsmodels==0.14.5
